@@ -13,7 +13,17 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true
-    }));
+    })); 
+
+    app.enableCors({
+    origin: [
+      'https://topicloom-app.onrender.com', // သင်၏ Production Frontend URL
+      'http://localhost:3000',               // Local Development အတွက်
+    ],
+    credentials: true, // Cookies / Better Auth session များ အလုပ်လုပ်ရန် မဖြစ်မနေ လိုအပ်ပါသည်
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'x-requested-with'],
+  })
 
     const port = process.env.PORT ?? 3000;
     await app.listen(port);
