@@ -22,6 +22,29 @@ export class UserService {
       return user;
   }
 
+  async getAllUserProfile() {
+     try { 
+       const users = await this.prisma.user.findMany({
+         where: {
+           role: {
+             in: ['ADMIN', 'EDITOR']
+           }
+         },
+         select: {
+           id: true,
+           email: true,
+           name: true,
+           role: true,
+           image: true,
+           bio: true
+         }
+       });
+       return users;
+     } catch (error) {
+      throw error;
+     }
+  }
+
   async updateProfile(userId: string, updateUserDto: CreateUserProfileDto) { 
    
     const user = await this.prisma.user.update({

@@ -17,10 +17,10 @@ async function bootstrap() {
 
     app.enableCors({
     origin: [
-      'https://topicloom-app.onrender.com', // သင်၏ Production Frontend URL
-      'http://localhost:3000',               // Local Development အတွက်
+      'https://topicloom-app.onrender.com', 
+      'http://localhost:3000',              
     ],
-    credentials: true, // Cookies / Better Auth session များ အလုပ်လုပ်ရန် မဖြစ်မနေ လိုအပ်ပါသည်
+    credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'x-requested-with'],
   })
