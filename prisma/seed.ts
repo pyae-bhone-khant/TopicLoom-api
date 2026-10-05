@@ -3,7 +3,6 @@ import {
   PrismaClient,
   Role,
   PostStatus,
-  CommentStatus,
 } from '../generated/prisma/client';
 import { neonConfig } from '@neondatabase/serverless';
 import { PrismaNeon } from '@prisma/adapter-neon';
@@ -129,27 +128,7 @@ async function main() {
     },
   });
 
-  // 5. Comments (မှတ်ချက်များ)
-  await prisma.comment.create({
-    data: {
-      postId: post1.id,
-      userId: subscriberUser.id,
-      content: 'အရမ်းကောင်းတဲ့ ဆောင်းပါးပါပဲ။ ဗဟုသုတ အများကြီး ရပါတယ်။',
-      status: CommentStatus.APPROVED,
-    },
-  });
-
-  await prisma.comment.create({
-    data: {
-      postId: post2.id,
-      authorName: 'ဧည့်သည်',
-      authorEmail: 'guest@example.com',
-      content: 'နောက်ထပ် AI နဲ့ ပတ်သက်တဲ့ အကြောင်းအရာလေးတွေ ရေးပေးပါဦး။',
-      status: CommentStatus.PENDING,
-    },
-  });
-
-  // 6. Post Likes (အကြိုက်များ)
+  // 5. Post Likes (အကြိုက်များ)
   await prisma.postLike.createMany({
     data: [
       { postId: post1.id, userId: subscriberUser.id },

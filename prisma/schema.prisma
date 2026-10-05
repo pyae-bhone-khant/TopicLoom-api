@@ -28,6 +28,7 @@ enum PostStatus {
   SCHEDULED
   PUBLISHED
   ARCHIVED
+  DELETED
 }
 
 // ==========================================
