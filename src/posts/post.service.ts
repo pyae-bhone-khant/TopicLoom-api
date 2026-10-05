@@ -6,7 +6,7 @@ export class PostService {
     constructor(private readonly prisma: PrismaService) {}
  async findAll() { 
     try {
-       const post = await this.prisma.post.findMany({
+       const posts = await this.prisma.post.findMany({
         select: {
             id: true,
             title: true,
@@ -31,14 +31,18 @@ export class PostService {
                             role : true
                         }
                     }
-                }
+                } 
             },
             createdAt: true,
             updatedAt: true,
         }
        }); 
-       const likeCount = post.map((post) => post.likes.length);
-       return { post, likeCount };
+     const post = posts.map((post) => ({
+           ...post,
+           likeCount: post.likes.length
+       }));
+
+       return post;
     } catch (error) {
        throw error;
     }
@@ -75,7 +79,7 @@ export class PostService {
                     }
                 }
             },  
-            createdAt: true,
+            createdAt: true, 
             updatedAt: true,
         }
        });
