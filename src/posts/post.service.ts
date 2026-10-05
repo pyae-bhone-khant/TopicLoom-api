@@ -17,6 +17,7 @@ export class PostService {
                     name: true,
                     email: true,
                     image: true,
+                    role: true, 
                 }
             }, 
             likes: {
@@ -27,6 +28,7 @@ export class PostService {
                             name: true,
                             email: true,
                             image: true,
+                            role : true
                         }
                     }
                 }
@@ -57,6 +59,7 @@ export class PostService {
                     name: true,
                     email: true,
                     image: true,
+                    role: true,
                 }
             }, 
             likes: {
@@ -67,6 +70,7 @@ export class PostService {
                             name: true,
                             email: true,
                             image: true,
+
                         }
                     }
                 }
