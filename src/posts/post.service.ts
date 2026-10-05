@@ -70,11 +70,10 @@ export class PostService {
                             name: true,
                             email: true,
                             image: true,
-
                         }
                     }
                 }
-            },
+            },  
             createdAt: true,
             updatedAt: true,
         }
@@ -82,6 +81,35 @@ export class PostService {
        return post;
     } catch (error) {
        throw error;
+    }
+  } 
+
+  async likePost(postId: string, userId: string) {
+    const existingLike = await this.prisma.postLike.findFirst({
+      where: {
+        postId: parseInt(postId),
+        userId: userId
+      }
+    });
+    if (existingLike) {
+      const unlike = await this.prisma.postLike.delete({
+        where: {
+          postId_userId: {
+            postId: existingLike.postId,
+            userId: existingLike.userId
+          }
+        }
+      });
+      return unlike;
+    } else { 
+
+        const like = await this.prisma.postLike.create({
+          data: {
+            postId: parseInt(postId),
+            userId: userId
+          }
+        });
+        return like;
     }
   }
 }
