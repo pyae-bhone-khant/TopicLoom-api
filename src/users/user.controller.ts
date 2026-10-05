@@ -29,7 +29,6 @@ export class UserController {
   }
 
   @Post('update-profile')
-  // @UseGuards(AccessTokenGuard)
   updateProfile(@Req() req: any, @Body() createUserProfileDto: CreateUserProfileDto) {
     return this.userService.updateProfile(req.user.id, createUserProfileDto);
   } 

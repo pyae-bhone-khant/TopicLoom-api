@@ -36,8 +36,9 @@ export class PostService {
             createdAt: true,
             updatedAt: true,
         }
-       });
-       return post;
+       }); 
+       const likeCount = post.map((post) => post.likes.length);
+       return { post, likeCount };
     } catch (error) {
        throw error;
     }
@@ -102,7 +103,6 @@ export class PostService {
       });
       return unlike;
     } else { 
-
         const like = await this.prisma.postLike.create({
           data: {
             postId: parseInt(postId),
