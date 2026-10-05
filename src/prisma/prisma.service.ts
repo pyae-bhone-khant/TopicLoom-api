@@ -11,9 +11,7 @@ neonConfig.webSocketConstructor = ws;
 export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
     const connectionString = process.env.DATABASE_URL;
-    
-    // Pass the configuration directly to PrismaNeon 
-    // instead of creating a `new Pool()` instance first
+   
     const adapter = new PrismaNeon({ connectionString });
     
     super({ adapter });

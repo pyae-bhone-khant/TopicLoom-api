@@ -15,10 +15,6 @@ datasource db {
 
 } 
 
-// ==========================================
-// ENUMS
-// ==========================================
-
 enum Role {
   AUTHOR
   ADMIN
@@ -32,13 +28,6 @@ enum PostStatus {
   SCHEDULED
   PUBLISHED
   ARCHIVED
-}
-
-enum CommentStatus {
-  PENDING
-  APPROVED
-  SPAM
-  REJECTED
 }
 
 // ==========================================
@@ -60,7 +49,6 @@ model User {
   posts         Post[]
   accounts      Account[]
   sessions      Session[]
-  comments      Comment[]
   postLikes     PostLike[]
   postRevisions PostRevision[]
 
@@ -106,8 +94,8 @@ model Post {
   title              String     @db.VarChar(255)
   slug               String     @unique @db.VarChar(280)
   summary            String?    @db.Text
-  content            String     @db.Text
-  featuredImageUrl   String?    @map("featured_image_url") @db.Text
+  content            String     @db.Text 
+  featuredImageUrl   String?    @map("featured_image_url") @db.Text 
   readingTimeMinutes Int        @default(1) @map("reading_time_minutes")
 
   // Lifecycle
@@ -129,7 +117,6 @@ model Post {
   author    User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category  Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   tags      Tag[]
-  comments  Comment[]
   likes     PostLike[]
   revisions PostRevision[]
 
@@ -154,33 +141,6 @@ model PostRevision {
   author User @relation(fields: [authorId], references: [id])
 
   @@map("post_revisions")
-}
-
-model Comment {
-  id          String        @id @default(uuid()) @db.Uuid
-  postId      Int           @map("post_id")
-  userId      String?       @map("user_id")
-  parentId    String?       @map("parent_id") @db.Uuid
-
-  // Guest Author Info
-  authorName  String?       @map("author_name") @db.VarChar(100)
-  authorEmail String?       @map("author_email") @db.VarChar(255)
-
-  content     String        @db.Text
-  status      CommentStatus @default(PENDING)
-  ipAddress   String?       @map("ip_address")
-  userAgent   String?       @map("user_agent") @db.Text
-
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
-
-  // Relations
-  post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
-  children Comment[] @relation("CommentToComment")
-
-  @@index([postId, parentId, createdAt])
-  @@map("comments")
 }
 
 model PostLike {   
@@ -235,7 +195,7 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade) 
 
   @@index([userId])
   @@map("account")

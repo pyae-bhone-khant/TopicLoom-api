@@ -6,6 +6,7 @@ import { AuthModule } from '@thallesp/nestjs-better-auth';
 
 import { UserModule } from './users/user.module';
 import { PrismaService } from './prisma/prisma.service';
+import { PostModule } from './posts/post.module';
 
 @Module({
    imports: [
@@ -13,6 +14,7 @@ import { PrismaService } from './prisma/prisma.service';
       auth, // Pass the Better Auth instance
     }),
     UserModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

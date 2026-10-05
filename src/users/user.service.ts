@@ -16,33 +16,29 @@ export class UserService {
          name: true,
          role: true,
          image: true,
-         bio: true
+         bio: true 
        }
      });
       return user;
   }
 
   async getAllUserProfile() {
-     try { 
-       const users = await this.prisma.user.findMany({
-         where: {
-           role: {
-             in: ['ADMIN', 'EDITOR']
-           }
-         },
-         select: {
-           id: true,
-           email: true,
-           name: true,
-           role: true,
-           image: true,
-           bio: true
-         }
-       });
-       return users;
-     } catch (error) {
-      throw error;
-     }
+    const users = await this.prisma.user.findMany({
+      where: {
+        role: {
+          in: ['ADMIN', 'EDITOR'],
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        image: true,
+        bio: true,
+      },
+    });
+    return users;
   }
 
   async updateProfile(userId: string, updateUserDto: CreateUserProfileDto) { 
@@ -64,5 +60,19 @@ export class UserService {
       },
     });
     return user;
+  } 
+
+  async getAllUser() {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        image: true,
+        bio: true
+      }
+    });
+    return users;
   }
 }
