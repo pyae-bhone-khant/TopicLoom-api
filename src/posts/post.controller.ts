@@ -6,8 +6,8 @@ export class PostController {
   constructor(private readonly postService: PostService) {} 
   
   @Get()
-  findAll() {
-    return this.postService.findAll();
+  findAll(@Req() req: any) {
+    return this.postService.findAll(req.user.id);
   } 
 
   @Get('own-posts')

@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class PostService {
     constructor(private readonly prisma: PrismaService) {}
- async findAll() { 
+ async findAll(currentUserId: string) { 
     try {
        const posts = await this.prisma.post.findMany({
         select: {
@@ -39,7 +39,8 @@ export class PostService {
        }); 
      const post = posts.map((post) => ({
            ...post,
-           likeCount: post.likes.length
+           likeCount: post.likes.length , 
+           isLiked: post.likes.some(like => like.user.id === currentUserId)
        }));
 
        return post;
