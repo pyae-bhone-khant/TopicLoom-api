@@ -40,7 +40,8 @@ export class PostService {
      const post = posts.map((post) => ({
            ...post,
            likeCount: post.likes.length , 
-           isLiked: post.likes.some(like => like.user.id === currentUserId)
+           isLiked: post.likes.some(like => like.user.id === currentUserId),
+           postLength: post.content.length
        }));
 
        return post;

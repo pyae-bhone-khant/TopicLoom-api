@@ -31,5 +31,12 @@ export class UserController {
   @Post('update-profile')
   updateProfile(@Req() req: any, @Body() createUserProfileDto: CreateUserProfileDto) {
     return this.userService.updateProfile(req.user.id, createUserProfileDto);
-  } 
+  }  
+
+  @Get('find-all-data')
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles(Role.ADMIN , Role.EDITOR)
+  FindAllData() {
+    return this.userService.FindAllData();
+  }
 }
