@@ -30,7 +30,7 @@ export class UserController {
       const pageNumber = page ? parseInt(page, 10) : 1;
     const limitNumber = limit ? parseInt(limit, 10) : 10;
     return this.userService.getAllUser(pageNumber, limitNumber);
-  }
+  } 
 
   @Post('update-profile')
   updateProfile(@Req() req: any, @Body() createUserProfileDto: CreateUserProfileDto) {

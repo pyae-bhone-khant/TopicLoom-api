@@ -12,9 +12,10 @@ export class PostService {
         select: {
             id: true,
             title: true,
-            content: true, 
+            content: true,
             featuredImageUrl: true,
-            author: {
+            status: true, 
+            author: { 
                 select: {
                     id: true,
                     name: true,
