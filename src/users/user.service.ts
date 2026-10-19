@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
+import { UpdateUserDto } from './dto/updateuser.role.dto';
 
 @Injectable()
 export class UserService {
@@ -62,20 +63,37 @@ export class UserService {
     return user;
   } 
 
-  async getAllUser() {
-    const users = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        image: true,
-        bio: true
-      }
-    }); 
-    const user = users , userLength : number = users.length;
-    return { user, userLength };
-  } 
+ async getAllUser(page: number = 1, limit: number = 10) {
+    // page နံပါတ်အပေါ် မူတည်ပြီး ဘယ်နခု ကျော်ရမလဲ (skip) ကို တွက်ချက်ခြင်း
+    const skip = (page - 1) * limit;
+
+    // အသုံးပြုသူ အားလုံးရဲ့ စုစုပေါင်း အရေအတွက်ကိုပါ တစ်ခါတည်း တွက်ချက်ရန်
+    const [users, userLength] = await Promise.all([
+      this.prisma.user.findMany({
+        skip: skip,
+        take: limit,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          image: true,
+          bio: true,
+        },
+      }),
+      this.prisma.user.count(), // စုစုပေါင်း user အရေအတွက်
+    ]);
+
+    return {
+      users,
+      meta: {
+        total: userLength,
+        page,
+        limit,
+        totalPages: Math.ceil(userLength / limit),
+      },
+    };
+  }
   
 async FindAllData() {
     // Promise.all ကိုသုံးပြီး Database Query ၅ ခုကို တပြိုင်နက်တည်း အလုပ်လုပ်ခိုင်းပါမယ်
@@ -133,5 +151,14 @@ async FindAllData() {
       postLength: totalPosts, 
       editorLength: totalEditors 
     };
+  }
+  
+  async ChangeUserData(userId: string, updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        role: updateUserDto.role,
+      },
+    });
   }
 }

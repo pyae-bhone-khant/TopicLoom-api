@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards  , Patch , Param, Query} from '@nestjs/common';
 import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { UserService } from './user.service';
 import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles, Role } from 'src/auth/decorators/auth.decorator';
+import { UpdateUserDto } from './dto/updateuser.role.dto';
 
 @Controller('user')
   
@@ -24,8 +25,11 @@ export class UserController {
   @Get('All-user')
   @UseGuards(AccessTokenGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  getAllUser() { 
-    return this.userService.getAllUser();
+  getAllUser(@Query('page') page?: string,
+    @Query('limit') limit?: string,) {  
+      const pageNumber = page ? parseInt(page, 10) : 1;
+    const limitNumber = limit ? parseInt(limit, 10) : 10;
+    return this.userService.getAllUser(pageNumber, limitNumber);
   }
 
   @Post('update-profile')
@@ -38,5 +42,15 @@ export class UserController {
   @Roles(Role.ADMIN , Role.EDITOR)
   FindAllData() {
     return this.userService.FindAllData();
+  } 
+
+ @Patch('change-user-role/:userId') 
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async ChangeUserData(
+    @Param('userId') userId: string, 
+    @Body() updateUserDto: UpdateUserDto, 
+  ) { 
+    return this.userService.ChangeUserData(userId, updateUserDto);
   }
 }

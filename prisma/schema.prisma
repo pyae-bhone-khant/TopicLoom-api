@@ -80,7 +80,6 @@ model Tag {
   slug      String   @unique @db.VarChar(60)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  // Relations (Implicit Many-to-Many via Prisma join table)
   posts Post[]
 
   @@map("tags")

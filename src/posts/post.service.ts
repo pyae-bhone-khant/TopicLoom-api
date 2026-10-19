@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreatePostDto } from './dtos/create.post.dto';
+import { UpdatePostDto } from './dtos/update.post.dto';
 
 @Injectable()
 export class PostService {
@@ -11,6 +13,7 @@ export class PostService {
             id: true,
             title: true,
             content: true, 
+            featuredImageUrl: true,
             author: {
                 select: {
                     id: true,
@@ -60,6 +63,7 @@ export class PostService {
             id: true,
             title: true,
             content: true, 
+            featuredImageUrl: true,
             author: {
                 select: {
                     id: true,
@@ -117,5 +121,45 @@ export class PostService {
         });
         return like;
     }
-  }
+  } 
+
+  async createPost(userId: string, createPostDto: CreatePostDto) {
+    try {
+      const post = await this.prisma.post.create({
+        data: {
+          authorId: userId,
+          title: createPostDto.title,
+          slug: createPostDto.slug || createPostDto.title.toLowerCase().replace(/ /g, '-'),
+          content: createPostDto.content,
+          featuredImageUrl: createPostDto.featuredImageUrl,
+          status: createPostDto.status || 'PUBLISHED' as any
+        }
+      });
+      return post;
+    } catch (error) {
+      throw error;
+    } 
+  }  
+  
+  async updatePost(postId: string, userId: string, updatePostDto: UpdatePostDto) {
+    try {
+      const post = await this.prisma.post.update({
+        where: {
+          id: parseInt(postId)
+        },
+        data: {
+          title: updatePostDto.title,
+          slug: updatePostDto.slug || updatePostDto.title?.toLowerCase().replace(/ /g, '-'),
+          content: updatePostDto.content,
+          featuredImageUrl: updatePostDto.featuredImageUrl,
+          status: updatePostDto.status || 'PUBLISHED' as any
+        }
+      });
+      return post;
+    } catch (error) {
+      throw error;
+    } 
+  } 
+
+  
 }
